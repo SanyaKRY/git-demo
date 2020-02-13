@@ -30,3 +30,5 @@ new WebDriverWait(driver, 30000).until((ExpectedCondition<Boolean>) driver -> dr
     
     
 new WebDriverWait(driver, 30000).until(ExpectedConditions.attributeToBeNotEmpty(driver.findElement(By.xpath("//*[@name='login']")), "value"));
+
+new WebDriverWait(driver, 30000).until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@id='myElem' and text() != '']")));
