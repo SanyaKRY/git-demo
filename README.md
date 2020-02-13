@@ -3,6 +3,9 @@
 GitHub · Where software is built
 
 http://barancev.github.io/
+https://xpinjection.com/articles/waits-and-timeouts-in-webdriver/
+https://www.browserstack.com/guide/wait-commands-in-selenium-webdriver
+
 
 
 new WebDriverWait(driver, 30000).until(new ExpectedCondition<Boolean>() {
