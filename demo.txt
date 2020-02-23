@@ -1,0 +1,101 @@
+package test;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.function.Predicate;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.google.common.base.Function;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Jaskier {	
+	private static final String EMAIL="kartera42@gmail.com";
+	  private static final String PASSWORD="satx3q4fqb7m";	
+	  private static final String NECESSARY_SMILEY_FACE="money_mouth_face";
+	  private WebDriver driver;
+			
+	  @BeforeMethod()
+	  public void signIn() {
+		  System.setProperty("chromedriver.exe","D://chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://github.com/");
+		driver.findElement(By.xpath("//*[@href='/login']")).click();
+		driver.findElement(By.xpath("//*[@name='login']")).sendKeys(EMAIL);
+		driver.findElement(By.xpath("//*[@name='password']")).sendKeys(PASSWORD);
+		driver.findElement(By.xpath("//*[@value='Sign in']")).click();    
+	  }
+
+	  @AfterMethod
+	  public void rollBack() {
+	    new WebDriverWait(driver, Duration.ofSeconds(1000)).until(ExpectedConditions
+		    .invisibilityOf(driver.findElement(By.cssSelector("button.js-user-status-submit"))));	        
+	    driver.findElement(By.cssSelector("summary.js-toggle-user-status-edit")).click();
+	    driver.findElement(By.cssSelector("button.js-clear-user-status-button")).click();  
+	    driver.quit();
+	    driver = null;
+	  }
+
+	  @Test
+	  public void setSmileyFaceTest(){		
+	    driver.findElement(By.xpath("//*[@aria-label='View profile and more']//*[@class='avatar']")).click();
+	    driver.findElement(By.cssSelector("summary.js-toggle-user-status-edit")).click();              
+		    
+	    
+	    
+	    WebElement smileButton = driver.findElement(By.cssSelector("button.js-toggle-user-status-emoji-picker")); 
+	  
+	    
+	    
+	    Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(15))
+                .pollingEvery(Duration.ofSeconds(1))
+                .withMessage("Timeout for waiting search result list was exceeded!"); 
+	    
+	    WebElement element = wait.until(new Function<WebDriver, WebElement>() {
+           
+public WebElement apply(WebDriver arg0) 
+{
+	new WebDriverWait(driver, 3000)
+	.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//*[@aria-label='People Emoji']")));
+	
+	
+	  WebElement smileysFaces =  driver.findElement(By.xpath("//*[@aria-label='People Emoji']"));  
+                 if (smileysFaces.isDisplayed()) 
+                  {
+                      return smileysFaces;
+                 }
+                 else {
+                	 smileButton.click();
+                   return null;
+                }
+}
+
+      });   
+	    
+	    
+	    
+		  
+	    
+	    
+	    
+	
+	  }
+		    
+	}
