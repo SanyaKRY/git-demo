@@ -1,0 +1,76 @@
+package test;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class Jaskier {	
+	private static final String EMAIL="kreyeraliaksandr@gmail.com";
+	  private static final String PASSWORD="satx3q4fqb7m";
+	  private WebDriver driver;
+			
+	  @BeforeMethod()
+	  public void signIn() {
+		  System.setProperty("chromedriver.exe","D://chromedriver.exe");
+		driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.get("https://github.com/");
+		driver.findElement(By.xpath("//*[@href='/login']")).click();
+		driver.findElement(By.xpath("//*[@name='login']")).sendKeys(EMAIL);
+		driver.findElement(By.xpath("//*[@name='password']")).sendKeys(PASSWORD);
+		driver.findElement(By.xpath("//*[@value='Sign in']")).click();    
+	  }
+
+	  
+
+	  @Test
+	  public void setSmileyFaceTest(){		
+	    driver.findElement(By.xpath("//*[@aria-label='View profile and more']")).click();
+	    driver.findElement(By.linkText("Your stars")).click();              
+	
+	    
+	    
+	    driver.findElement(By.xpath("//*[@aria-label='Show filters']")).click();
+	    driver.findElement(By.linkText("Most stars")).click();
+	    
+
+	    List<WebElement> stars=driver.findElements(By.xpath("//*[@class='muted-link mr-3' and contains(@href,'stargazers')]"));
+	    List<Integer> inttts =stars.stream().map(element -> Integer.parseInt(element.getText())).collect(Collectors.toList());	
+	    for (Integer integer : inttts) {
+			System.out.println(integer);
+		}
+	    
+	    
+	    boolean sorted = Ordering.natural().reverse().isOrdered(inttts);	
+	    System.out.println("значение" +sorted);
+	    if (sorted) {
+			System.out.println("Отсортирован");
+		}
+	    
+
+	  }
+		    
+	}
